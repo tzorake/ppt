@@ -1,14 +1,12 @@
-#ifndef MATRIX_HELPER_HPP
-#define MATRIX_HELPER_HPP
+#ifndef MATRIX_HELPER_S_HPP
+#define MATRIX_HELPER_S_HPP
 
-#include "matrix.hpp"
 #include <vector>
 #include <algorithm>
 #include <random>
+#include "matrix_single_threaded.hpp"
 
-constexpr auto TOLERANCE = 1e-9;
-
-class MatrixHelper
+class MatrixHelper_S
 {
 public:
 	static void setSeed(int seed)
@@ -16,7 +14,7 @@ public:
 		s_seed = seed;
 	}
 
-	static MatrixD getRandomMatrix(int rows, int cols)
+	static MatrixD_S randomMatrix(int rows, int cols)
 	{
 		vector<double> result(rows * cols);
 
@@ -25,20 +23,20 @@ public:
 
 		std::generate(result.begin(), result.end(), [&]() { return dis(gen); });
 
-		return MatrixD(rows, cols, result);
+		return MatrixD_S(rows, cols, result);
 	}
 
-	static MatrixD getRandomNonZeroDeterminantMatrix(int size)
+	static MatrixD_S randomNonZeroDeterminantMatrix(int size)
 	{
-		MatrixD A;
+		MatrixD_S A;
 		double determinant;
 
 		while (true)
 		{
-			A = MatrixHelper::getRandomMatrix(size, size);
+			A = MatrixHelper_S::randomMatrix(size, size);
 			determinant = A.determinant();
 
-			if (std::abs(determinant) > TOLERANCE)
+			if (std::abs(determinant) > s_tolerance)
 			{
 				break;
 			}
@@ -49,8 +47,9 @@ public:
 
 private:
 	static int s_seed;
+	static constexpr auto s_tolerance = 1e-9;
 };
 
-int MatrixHelper::s_seed = 3;
+int MatrixHelper_S::s_seed = 3;
 
-#endif //MATRIX_HELPER_HPP
+#endif //MATRIX_HELPER_S_HPP

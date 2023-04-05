@@ -3,7 +3,7 @@
 #include <iostream>
 #include "matrix.hpp"
 #include "matrix_helper.hpp"
-#include "text_table.h"
+#include "text_table.hpp"
 
 #define VERBOSE false
 

@@ -11,12 +11,16 @@ constexpr auto TOLERANCE = 1e-9;
 class MatrixHelper
 {
 public:
-	static MatrixD getRandomMatrix(size_t rows, size_t cols)
+	static void setSeed(int seed)
+	{
+		s_seed = seed;
+	}
+
+	static MatrixD getRandomMatrix(int rows, int cols)
 	{
 		vector<double> result(rows * cols);
 
-		std::random_device rd;
-		std::mt19937 gen(rd());
+		std::mt19937 gen(s_seed);
 		std::uniform_int_distribution<int> dis(0, 10);
 
 		std::generate(result.begin(), result.end(), [&]() { return dis(gen); });
@@ -24,7 +28,7 @@ public:
 		return MatrixD(rows, cols, result);
 	}
 
-	static MatrixD getRandomNonZeroDeterminantMatrix(size_t size)
+	static MatrixD getRandomNonZeroDeterminantMatrix(int size)
 	{
 		MatrixD A;
 		double determinant;
@@ -42,6 +46,11 @@ public:
 
 		return A;
 	}
+
+private:
+	static int s_seed;
 };
+
+int MatrixHelper::s_seed = 3;
 
 #endif //MATRIX_HELPER_HPP

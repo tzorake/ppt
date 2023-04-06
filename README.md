@@ -6,6 +6,8 @@
 Ниже описаны шаги по сборке и запуску.
 
 ```batch
+git clone git@github.com:tzorake/ppt.git
+cd ppt
 g++ main.cpp -fopenmp -o main.exe
 main.exe
 ```

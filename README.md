@@ -5,9 +5,7 @@
 У меня установлены `Windows 10` и `g++ (MinGW.org GCC-6.3.0-1) 6.3.0`. \
 Ниже описаны шаги по сборке и запуску.
 
-```batch
-git clone git@github.com:tzorake/ppt.git
-cd ppt
+```console
 g++ main.cpp -fopenmp -o main.exe
 main.exe
 ```

@@ -6,7 +6,7 @@
 Ниже описаны шаги по сборке и запуску.
 
 ```console
-g++ main.cpp -fopenmp -o main.exe
+g++ main.cpp -fopenmp -o main
 main.exe
 ```
 

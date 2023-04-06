@@ -1,10 +1,8 @@
 #define _OPENMP_LLVM_RUNTIME
 #include <omp.h>
 #include <iostream>
-#include "matrix_single_threaded.hpp"
-#include "matrix_helper_single_threaded.hpp"
-#include "matrix_multi_threaded.hpp"
-#include "matrix_helper_multi_threaded.hpp"
+#include "matrix.hpp"
+#include "matrix_helper.hpp"
 #include "text_table.hpp"
 
 double sequentialAlgorithm(int N, bool verbose = false)
@@ -12,17 +10,17 @@ double sequentialAlgorithm(int N, bool verbose = false)
     omp_set_num_threads(1);
     omp_set_schedule(omp_sched_static, 0);
 
-    MatrixHelper_S::setSeed(3);
+    MatrixHelper::setSeed(3);
 
-    MatrixD_S A = MatrixHelper_S::randomNonZeroDeterminantMatrix(N);
-    MatrixD_S B = MatrixHelper_S::randomMatrix(N, 1);
+    MatrixD A = MatrixHelper::randomNonZeroDeterminantMatrix(N);
+    MatrixD B = MatrixHelper::randomMatrix(N, 1);
 
     double start = omp_get_wtime();
 
     double det = A.determinant();
-    MatrixD_S A_adj = A.adjugate();
-    MatrixD_S A_inv = A_adj / det;
-    MatrixD_S X = A_inv * B;
+    MatrixD A_adj = A.adjugate();
+    MatrixD A_inv = A_adj / det;
+    MatrixD X = A_inv * B;
 
     double end = omp_get_wtime();
 
@@ -54,17 +52,17 @@ double multiThreadedAlgorithm(int N, int M, bool useStatic = true, bool verbose 
         omp_set_schedule(omp_sched_dynamic, 0);
     }
 
-    MatrixHelper_M::setSeed(3);
+    MatrixHelper::setSeed(3);
 
-    MatrixD_M A = MatrixHelper_M::randomNonZeroDeterminantMatrix(N);
-    MatrixD_M B = MatrixHelper_M::randomMatrix(N, 1);
+    MatrixD A = MatrixHelper::randomNonZeroDeterminantMatrix(N);
+    MatrixD B = MatrixHelper::randomMatrix(N, 1);
 
     double start = omp_get_wtime();
 
     double det = A.determinant();
-    MatrixD_M A_adj = A.adjugate();
-    MatrixD_M A_inv = A_adj / det;
-    MatrixD_M X = A_inv * B;
+    MatrixD A_adj = A.adjugate();
+    MatrixD A_inv = A_adj / det;
+    MatrixD X = A_inv * B;
 
     double end = omp_get_wtime();
 
@@ -82,87 +80,6 @@ double multiThreadedAlgorithm(int N, int M, bool useStatic = true, bool verbose 
 
     return elapsed;
 }
-
-// void testAlgorithms()
-// {
-//     std::vector<int> Ns { 5, 7, 9 };
-//     std::vector<int> Ms { 2, 4, 8, 16 };
-
-//     auto printSeq = [&](std::vector<double> table) {
-//         TextTable t( '-', '|', '+' );
-
-//         t.add( "N" );
-//         t.add( "t" );
-//         t.endOfRow();
-
-//         for (size_t i = 0; i < Ns.size(); ++i)
-//         {
-//             t.add( std::to_string(Ns[i]) );
-//             t.add( std::to_string(table[i]) );
-//             t.endOfRow();
-//         }
-
-//         std::cout << t;
-//     };
-
-//     auto printMul = [&](std::vector<std::vector<double>> table) {
-//         TextTable t( '-', '|', '+' );
-
-//         t.add( "N \\ M" );
-
-//         for (size_t j = 0; j < Ms.size(); ++j)
-//         {
-//             t.add( std::to_string(Ms[j]) );
-//         }
-
-//         t.endOfRow();
-
-//         for (size_t i = 0; i < Ns.size(); ++i)
-//         {
-//             t.add( std::to_string(Ns[i]) );
-
-//             for (size_t j = 0; j < Ms.size(); ++j)
-//             {
-//                 t.add( std::to_string(table[i][j]) );
-//             }
-
-//             t.endOfRow();
-//         }
-
-//         std::cout << t;
-//     };
-
-//     std::vector<double> seqValues;
-
-//     for (size_t i = 0; i < Ns.size(); ++i)
-//     {
-//         int N = Ns[i];
-
-//         double value = sequentialAlgorithm(N);
-
-//         seqValues.push_back(value);
-//     }
-
-//     printSeq(seqValues);
-
-//     std::vector<std::vector<double>> mulValues(Ns.size());
-
-//     for (size_t i = 0; i < Ns.size(); ++i)
-//     {
-//         for (size_t j = 0; j < Ms.size(); ++j)
-//         {
-//             int N = Ns[i];
-//             int M = Ms[j];
-
-//             double value = multiThreadedAlgorithm(N, M);
-
-//             mulValues[i].push_back(value);
-//         }
-//     }
-
-//     printMul(mulValues);
-// }
-
 
 void testAlgorithms(bool useStatic = true)
 {
@@ -211,9 +128,9 @@ void testAlgorithms(bool useStatic = true)
         {
             t.add( std::to_string( Ns[i] ) );
             t.add( std::to_string( Ms[j] ) );
-            t.add( std::to_string( seqValues[j] ) );
+            t.add( std::to_string( seqValues[i] ) );
             t.add( std::to_string( mulValues[i][j] ) );
-            t.add( std::to_string( seqValues[j] / (Ms[j] * mulValues[i][j]) ) );
+            t.add( std::to_string( seqValues[i] / (Ms[j] * mulValues[i][j]) ) );
             t.endOfRow();
         }
     }

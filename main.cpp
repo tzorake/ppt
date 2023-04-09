@@ -92,7 +92,7 @@ void testAlgorithms(bool useStatic = true)
     t.add( "E_p" );
     t.endOfRow();
 
-    std::vector<int> Ns { 6, 7, 8 };
+    std::vector<int> Ns { 7, 8, 9 };
     std::vector<int> Ms { 2, 4, 8, 16 };
 
     std::vector<double> seqValues;

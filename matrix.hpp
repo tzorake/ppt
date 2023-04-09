@@ -12,6 +12,7 @@
 #include <cmath>
 #include <set>
 #include <complex>
+#include <random>
 
 using namespace std;
 
@@ -36,6 +37,16 @@ private:
     }
 
 public:
+    int nCols() const 
+    { 
+        return mCols; 
+    }
+
+    int nRows() const 
+    { 
+        return mRows; 
+    }
+
     Matrix() 
     {
         mRows = mCols = 0;
@@ -369,8 +380,6 @@ public:
 
     Matrix operator!=(const double& value) 
     {
-        
-        
         return -((*this == value) - 1);
     }
 
@@ -457,15 +466,8 @@ public:
         return result;
     }
 
-    
-    
-    
-    
-    
     double getMinor(int row, int column) const 
     {
-        
-        
         if (mRows == 2 and mCols == 2) 
         {
             Matrix result(2, 2);
@@ -481,14 +483,9 @@ public:
         return submatrix(row, column).determinant();
     }
 
-    
-    
-    
-    
     double cofactor(int row, int column) const 
     {
         double minor;
-
         
         if (mRows == 2 and mCols == 2) 
         {
@@ -517,8 +514,6 @@ public:
         return (row + column) % 2 == 0 ? minor : -minor;
     }
 
-    
-    
     Matrix cofactorMatrix() const 
     {
         Matrix result(mRows, mCols);
@@ -535,16 +530,11 @@ public:
         return result;
     }
 
-    
-    
     Matrix adjugate() const 
     {
         return cofactorMatrix().transpose();
     }
 
-    
-    
-    
     Matrix inverse() const 
     {
         if (!isSquare())
@@ -564,8 +554,6 @@ public:
         return adjugate() / det;
     };
 
-    
-    
     double determinant() const 
     {
         if (!isSquare()) 
@@ -582,7 +570,7 @@ public:
         }
         else 
         {
-#pragma omp parallel for reduction (+:d)
+            #pragma omp parallel for reduction (+:d)
             for (int c = 0; c < n; c++) 
             {
                 d += pow(-1, c) * operator()(0, c) * submatrix(0, c).determinant();
@@ -592,8 +580,6 @@ public:
         }
     }
 
-    
-    
     Matrix transpose() const 
     {
         Matrix result(mCols, mRows);
@@ -609,10 +595,6 @@ public:
 
         return result;
     }
-
-    
-    
-    
     
     friend ostream& operator<<(ostream& os, const Matrix& matrix) 
     {
@@ -631,11 +613,10 @@ public:
         return os;
     }
 
-    
-    
     Matrix copy() 
     {
         Matrix result(mRows, mCols);
+
         result.mData = mData;
 
         return result;
@@ -654,6 +635,7 @@ public:
     Matrix<T> apply(function<T(T)> f) 
     {
         Matrix<T> result(mRows, mCols, vector<T>(mRows * mCols, 0));
+
         std::transform(mData.begin(), mData.end(), result.mData.begin(), f);
 
         return result;

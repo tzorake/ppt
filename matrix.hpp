@@ -570,7 +570,7 @@ public:
         }
         else 
         {
-            #pragma omp parallel for reduction (+:d)
+#pragma omp parallel for reduction (+:d)
             for (int c = 0; c < n; c++) 
             {
                 d += pow(-1, c) * operator()(0, c) * submatrix(0, c).determinant();

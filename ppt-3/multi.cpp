@@ -165,9 +165,9 @@ int main(int argc, char **argv)
 		elapsed = MPI_Wtime() - elapsed;
 
 		std::cout << fmt::format(
-			"integrate ({}) dx from x={} to {} = {}",
-			fmt::format("integrate ({} * (x^{} + y^{})) dx from x={} to {}", A, B, C, c, d),
-			a, b, integral ) << std::endl
+			"integrate ({}) dy from y={} to {} = {}",
+			fmt::format("integrate ({} * (x^{} + y^{})) dx from x={} to {}", A, B, C, a, b),
+			c, d, integral ) << std::endl
 		<< "Elapsed time: " << elapsed  << std::endl;
 
 	    FileSystem::writeFile(filename, std::to_string(elapsed));

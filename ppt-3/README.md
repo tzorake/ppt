@@ -6,8 +6,8 @@
 Ниже описаны шаги по сборке и запуску. Для запуска программы необходимо установить `OpemMPI`.
 
 ```console
-g++ -o single -I include/ single.cpp
-./single
+mpic++ multi.cpp -I include/ -o multi
+mpiexec -n 1 ./multi N 1000 FILENAME out.txt
 
 g++ -o main -I include/ main.cpp
 ./main
